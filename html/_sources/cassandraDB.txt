@@ -1,0 +1,10 @@
+Our Cassandra Database
+======================
+
+
+Contents:
+
+.. toctree::
+   :maxdepth: 1
+
+   schema

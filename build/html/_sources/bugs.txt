@@ -1,0 +1,10 @@
+Bugs
+====
+
+
+.. toctree::
+   :maxdepth: 1
+   
+   currentbugs
+   fixedbugs
+

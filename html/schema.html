@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Database Schemas &mdash; Open Source Data Analytics 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Open Source Data Analytics 1.0 documentation" href="index.html" />
+    <link rel="up" title="Our Cassandra Database" href="cassandraDB.html" />
+    <link rel="next" title="Guides" href="guides.html" />
+    <link rel="prev" title="Our Cassandra Database" href="cassandraDB.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="guides.html" title="Guides"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cassandraDB.html" title="Our Cassandra Database"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Open Source Data Analytics 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" >Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="cassandraDB.html" accesskey="U">Our Cassandra Database</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="database-schemas">
+<h1>Database Schemas<a class="headerlink" href="#database-schemas" title="Permalink to this headline">¶</a></h1>
+<p><strong>Candidates</strong></p>
+<p>Each candidate gets their own table following the same pattern. The primary key is a string that contains the date that the tweet was created at. There is a list of floats that contain the coordinates of the user that posted the given tweet. There is an integer that represents the number of times the given tweet was favorited. There is also a list of strings that contains all of the different hashtags used in the tweet. Next, there is a string that represents the language that the tweet was typed in. There is a big int that represents the quoted status id. There is also an int that represents the number of times the given tweet was retweeted. Finally, there is a string that represents the unique tweet id of the tweet.</p>
+<p><strong>Polls</strong></p>
+<p>The attributes of each poll are id, pollser, start_date, end_date, name, observations, responses. The ID is used as the primary key and is just an integer that increments with each poll inserted into the database. This was necessary because there was no gurantee that any attribute or small subset of attributes from the API would always be unique. The last ID used is stored in PollID_DONOTTOUCH.txt so that it can be remembered each time PollGrabber.py is run. pollster, start_date, end_date and name are all stored as strings (&#8216;text&#8217; in cql) and are taken directly from the API. &#8216;observations&#8217; is also taken from the API but is stored as an int. &#8216;responses&#8217; is also stored as text, but is an array of dictionaries containing the information about each choice given in the poll. After being retrieved from the database, &#8216;eval()&#8217; is used to decipher its structure in Python. This structure is explained in PollReturnableStructure.md</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cassandraDB.html"
+                        title="previous chapter">Our Cassandra Database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="guides.html"
+                        title="next chapter">Guides</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/schema.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="guides.html" title="Guides"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cassandraDB.html" title="Our Cassandra Database"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Open Source Data Analytics 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" >Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="cassandraDB.html" >Our Cassandra Database</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Phu Dang, Samuel Horton, David Bittle, Daniel Nolan, Bryan Connelly, Eric Lindemann.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>
