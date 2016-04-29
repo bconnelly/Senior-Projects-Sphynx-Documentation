@@ -1,9 +1,0 @@
-RegressionAnalysis.py
-=====================
-
-***********************************
-**Purpose: ** Create a regression line of any order representing the relationship between two data sources over a set time frame
-***********************************
-
-.. literalinclude:: RegressionAnalysis.py
-   :language: python
