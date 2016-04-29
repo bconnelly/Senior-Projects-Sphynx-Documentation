@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>getGDELT.sh &mdash; osam 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="osam 1.0 documentation" href="index.html" />
+    <link rel="up" title="Data Collection Scripts" href="dataCollectionScripts.html" />
+    <link rel="next" title="Testing Scripts" href="testingScripts.html" />
+    <link rel="prev" title="Data Collection Scripts" href="dataCollectionScripts.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="testingScripts.html" title="Testing Scripts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dataCollectionScripts.html" title="Data Collection Scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">osam 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="scripts.html" >Scripts</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="dataCollectionScripts.html" accesskey="U">Data Collection Scripts</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getgdelt-sh">
+<h1>getGDELT.sh<a class="headerlink" href="#getgdelt-sh" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="purpose-download-the-gdelt-files-from-the-previous-day-for-each-candidate">
+<h2><strong>Purpose:</strong> Download the GDELT files from the previous day for each candidate<a class="headerlink" href="#purpose-download-the-gdelt-files-from-the-previous-day-for-each-candidate" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="inputs-the-correctly-formatted-version-of-the-previous-day-s-date">
+<h3><strong>Inputs:</strong> The correctly formatted version of the previous day&#8217;s date<a class="headerlink" href="#inputs-the-correctly-formatted-version-of-the-previous-day-s-date" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="outputs-a-big-gdelt-zip-file-along-with-the-gdelt-file-for-each-candidate">
+<h3><strong>Outputs:</strong> A big GDELT.zip file, along with the GDELT file for each candidate<a class="headerlink" href="#outputs-a-big-gdelt-zip-file-along-with-the-gdelt-file-for-each-candidate" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">cd</span> /home/centos/CSCI-4308-Open-Sources-Data-Analytics
+<span class="nv">a</span><span class="o">=</span><span class="k">$(</span>python getDate.py<span class="k">)</span>
+a+<span class="o">=</span><span class="s2">&quot;000000&quot;</span>
+<span class="nb">echo</span> <span class="nv">$a</span>
+<span class="nv">a</span><span class="o">=</span><span class="k">$(</span>python calculateDate.py -subDay <span class="nv">$a</span><span class="k">)</span>
+<span class="c1">#a=&quot;20160309000000&quot;</span>
+<span class="nv">b</span><span class="o">=</span><span class="si">${</span><span class="nv">a</span><span class="p">:</span><span class="k">:-</span><span class="nv">6</span><span class="si">}</span>
+
+<span class="nb">echo</span> <span class="nv">$b</span>
+
+
+python gdelt.py -n <span class="s2">&quot;kasich, rubio, sanders, clinton, bush, carson, cruz, trump&quot;</span> -e <span class="nv">$b</span>
+
+python parseGDELT.py <span class="nv">$b</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/osam3.PNG" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">getGDELT.sh</a><ul>
+<li><a class="reference internal" href="#purpose-download-the-gdelt-files-from-the-previous-day-for-each-candidate"><strong>Purpose:</strong> Download the GDELT files from the previous day for each candidate</a><ul>
+<li><a class="reference internal" href="#inputs-the-correctly-formatted-version-of-the-previous-day-s-date"><strong>Inputs:</strong> The correctly formatted version of the previous day&#8217;s date</a></li>
+<li><a class="reference internal" href="#outputs-a-big-gdelt-zip-file-along-with-the-gdelt-file-for-each-candidate"><strong>Outputs:</strong> A big GDELT.zip file, along with the GDELT file for each candidate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dataCollectionScripts.html"
+                        title="previous chapter">Data Collection Scripts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="testingScripts.html"
+                        title="next chapter">Testing Scripts</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/getGDELT.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="testingScripts.html" title="Testing Scripts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dataCollectionScripts.html" title="Data Collection Scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">osam 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="scripts.html" >Scripts</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="dataCollectionScripts.html" >Data Collection Scripts</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Phu Dang, Samuel Horton, David Bittle, Daniel Nolan, Bryan Connelly, Eric Lindemann.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

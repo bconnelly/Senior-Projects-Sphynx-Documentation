@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>getDate.py &mdash; osam 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="osam 1.0 documentation" href="index.html" />
+    <link rel="up" title="Code for Data Collection" href="dataCollectionCode.html" />
+    <link rel="next" title="Code for Analysis" href="analysisCode.html" />
+    <link rel="prev" title="threadCass.py" href="threadCass.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="analysisCode.html" title="Code for Analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="threadCass.html" title="threadCass.py"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">osam 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="code.html" >Source Code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="dataCollectionCode.html" accesskey="U">Code for Data Collection</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getdate-py">
+<h1>getDate.py<a class="headerlink" href="#getdate-py" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="purpose-convert-a-linux-date-to-a-more-usable-date-format-ex-converts-mon-apr-11-to-20160411">
+<h2><strong>Purpose:</strong> Convert a Linux date to a more usable date format. Ex: Converts <em>Mon Apr 11</em> to <em>20160411</em><a class="headerlink" href="#purpose-convert-a-linux-date-to-a-more-usable-date-format-ex-converts-mon-apr-11-to-20160411" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="inputs-linux-date-provided-by-the-date-command">
+<h3><strong>Inputs:</strong> Linux date provided by the date command<a class="headerlink" href="#inputs-linux-date-provided-by-the-date-command" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="outputs-date-format-that-gdelt-understands">
+<h3><strong>Outputs:</strong> Date format that GDELT understands<a class="headerlink" href="#outputs-date-format-that-gdelt-understands" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">call</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">call</span><span class="p">(</span><span class="s2">&quot;sudo sh -c </span><span class="se">\&quot;</span><span class="s2">date | cut -d &#39; &#39; -f 2-6 &gt; date.txt</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+
+<span class="n">date_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Jan&quot;</span> <span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span> <span class="s2">&quot;Feb&quot;</span> <span class="p">:</span> <span class="s2">&quot;02&quot;</span><span class="p">,</span> <span class="s2">&quot;Mar&quot;</span> <span class="p">:</span> <span class="s2">&quot;03&quot;</span><span class="p">,</span> <span class="s2">&quot;Apr&quot;</span> <span class="p">:</span> <span class="s2">&quot;04&quot;</span><span class="p">,</span> <span class="s2">&quot;May&quot;</span> <span class="p">:</span> <span class="s2">&quot;05&quot;</span><span class="p">,</span> <span class="s2">&quot;Jun&quot;</span> <span class="p">:</span> <span class="s2">&quot;06&quot;</span><span class="p">,</span> <span class="s2">&quot;Jul&quot;</span> <span class="p">:</span> <span class="s2">&quot;07&quot;</span><span class="p">,</span> <span class="s2">&quot;Aug&quot;</span> <span class="p">:</span> <span class="s2">&quot;08&quot;</span><span class="p">,</span> <span class="s2">&quot;Sep&quot;</span> <span class="p">:</span> <span class="s2">&quot;09&quot;</span><span class="p">,</span> <span class="s2">&quot;Oct&quot;</span> <span class="p">:</span> <span class="s2">&quot;10&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov&quot;</span> <span class="p">:</span> <span class="s2">&quot;11&quot;</span><span class="p">,</span> <span class="s2">&quot;Dec&quot;</span> <span class="p">:</span> <span class="s2">&quot;12&quot;</span><span class="p">}</span>
+
+<span class="c1">#Feb 14 15:09:30</span>
+
+<span class="n">full_date</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="k">def</span> <span class="nf">updateData</span><span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_word_number</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">full_date</span>
+    <span class="n">full_date</span> <span class="o">+=</span> <span class="n">current_word</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">current_word_number</span><span class="o">+</span><span class="mi">1</span>
+
+
+
+<span class="k">def</span> <span class="nf">getDate</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">full_date</span><span class="p">,</span> <span class="n">date_dictionary</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;date.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">date_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">date_file</span><span class="p">:</span>
+            <span class="n">current_word</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">current_word_number</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">character</span> <span class="o">!=</span> <span class="s1">&#39; &#39;</span><span class="p">):</span>
+                    <span class="n">current_word</span> <span class="o">+=</span> <span class="n">character</span>
+                    
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">current_word_number</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="n">current_word</span> <span class="o">=</span> <span class="n">date_dictionary</span><span class="p">[</span><span class="n">current_word</span><span class="p">]</span>
+
+	            <span class="n">res</span> <span class="o">=</span> <span class="n">updateData</span><span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_word_number</span><span class="p">)</span>
+                    <span class="n">current_word</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">current_word_number</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">full_date</span> <span class="o">=</span> <span class="n">current_word</span><span class="o">+</span><span class="n">full_date</span>
+
+
+        
+    
+    <span class="n">full_date</span> <span class="o">=</span> <span class="n">full_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;MDT&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">full_date</span> <span class="o">=</span> <span class="n">full_date</span><span class="p">[:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> 
+    
+
+    <span class="c1">#day is less than 10, add zero in front</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">full_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="n">full_date</span> <span class="o">=</span> <span class="n">full_date</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="n">full_date</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+  
+    <span class="k">return</span> <span class="n">full_date</span>
+
+<span class="k">print</span> <span class="n">getDate</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/osam3.PNG" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">getDate.py</a><ul>
+<li><a class="reference internal" href="#purpose-convert-a-linux-date-to-a-more-usable-date-format-ex-converts-mon-apr-11-to-20160411"><strong>Purpose:</strong> Convert a Linux date to a more usable date format. Ex: Converts <em>Mon Apr 11</em> to <em>20160411</em></a><ul>
+<li><a class="reference internal" href="#inputs-linux-date-provided-by-the-date-command"><strong>Inputs:</strong> Linux date provided by the date command</a></li>
+<li><a class="reference internal" href="#outputs-date-format-that-gdelt-understands"><strong>Outputs:</strong> Date format that GDELT understands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="threadCass.html"
+                        title="previous chapter">threadCass.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="analysisCode.html"
+                        title="next chapter">Code for Analysis</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/getDate.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="analysisCode.html" title="Code for Analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="threadCass.html" title="threadCass.py"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">osam 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="code.html" >Source Code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="dataCollectionCode.html" >Code for Data Collection</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Phu Dang, Samuel Horton, David Bittle, Daniel Nolan, Bryan Connelly, Eric Lindemann.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

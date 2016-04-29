@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>LinearRegressionObject.py &mdash; osam 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="osam 1.0 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">osam 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="linearregressionobject-py">
+<h1>LinearRegressionObject.py<a class="headerlink" href="#linearregressionobject-py" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="purpose-child-class-to-perform-linear-regression-analysis">
+<h2><strong>Purpose:</strong> Child class to perform linear regression analysis<a class="headerlink" href="#purpose-child-class-to-perform-linear-regression-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="inputs-name-of-candidate-either-list-of-tweet-counts-gdelt-counts-or-polls-counts">
+<h3><strong>Inputs:</strong> Name of candidate, Either list of Tweet counts, GDELT counts, or Polls counts<a class="headerlink" href="#inputs-name-of-candidate-either-list-of-tweet-counts-gdelt-counts-or-polls-counts" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1">#  LinearRegressionObject.py</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright 2016 user &lt;user@cu-cs-vm&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is free software; you can redistribute it and/or modify</span>
+<span class="c1">#  it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#  the Free Software Foundation; either version 2 of the License, or</span>
+<span class="c1">#  (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#  GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#  You should have received a copy of the GNU General Public License</span>
+<span class="c1">#  along with this program; if not, write to the Free Software</span>
+<span class="c1">#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,</span>
+<span class="c1">#  MA 02110-1301, USA.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+
+<span class="kn">from</span> <span class="nn">AnalysisObject</span> <span class="kn">import</span> <span class="n">AnalysisObject</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="k">class</span> <span class="nc">LinearRegressionObject</span><span class="p">(</span><span class="n">AnalysisObject</span><span class="p">):</span>
+
+	<span class="c1">#fixed_para_one: name of candidate</span>
+	<span class="c1">#fixed_para_two: list of dates</span>
+	<span class="c1">#list_para_one: list (source, list of counts) for x-values</span>
+	<span class="c1">#list_para_two: list (source, list of counts) for y values</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fixed_para_one</span><span class="p">,</span><span class="n">fixed_para_two</span><span class="p">,</span><span class="n">list_para_one</span><span class="p">,</span><span class="n">list_para_two</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s1">&#39;LinearRegressionObject X: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">list_para_one</span><span class="p">)</span>
+                <span class="k">print</span> <span class="s1">&#39;LinearRegressionObject Y: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">list_para_two</span><span class="p">)</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">LinearRegressionObject</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">fixed_para_one</span><span class="p">,</span><span class="n">fixed_para_two</span><span class="p">,</span><span class="n">list_para_one</span><span class="p">,</span><span class="n">list_para_two</span><span class="p">)</span>
+
+	<span class="c1">#use to calculate the corellation between two data sets</span>
+	<span class="k">def</span> <span class="nf">__correlationCalculation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">correl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">correl</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+			<span class="k">return</span> <span class="s2">&quot;Two variable sets are uncorrelated.</span><span class="se">\n</span><span class="s2">&quot;</span>
+		<span class="k">elif</span> <span class="p">(</span><span class="n">correl</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+			<span class="k">return</span> <span class="s2">&quot;There is a positive correlation: one variable set moves the the same direction by &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">correl</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot; the amount that the other variable set moves.</span><span class="se">\n</span><span class="s2">&quot;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="s2">&quot;There is a negative correlation: one variable set moves the the opposite direction by &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">correl</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot; the amount that the other variable set moves.</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+
+	<span class="k">def</span> <span class="nf">__graphData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span><span class="n">slope</span><span class="p">,</span><span class="n">intercept</span><span class="p">,</span><span class="n">training</span><span class="p">):</span>
+		<span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;scatter&#39;</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="n">x_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="n">training</span><span class="p">:]</span>
+		<span class="n">y_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="n">training</span><span class="p">:]</span>
+		<span class="n">b</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_eval</span><span class="p">,</span><span class="n">y_eval</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">1</span><span class="p">]:</span>
+			<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+			<span class="n">y_value</span> <span class="o">=</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="n">intercept</span>
+			<span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_value</span><span class="p">)</span>
+		<span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+		<span class="n">linear_reg</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;report&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getfixed_para_one</span><span class="p">()</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;../FrontEnd/NGC-FrontEnd/public/analyis-images/&#39;</span> <span class="o">+</span> <span class="s1">&#39;report&#39;</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getfixed_para_one</span><span class="p">()</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">linear_reg</span><span class="p">)</span>
+
+		<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../FrontEnd/NGC-FrontEnd/public/analysis-images/report&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getfixed_para_one</span><span class="p">()</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+	
+	<span class="c1">#Return the tuples of (report,(date,predict values, exact values))</span>
+	<span class="k">def</span> <span class="nf">linearRegressionAnalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">text_output</span> <span class="o">=</span> <span class="s2">&quot;LINEAR REGRESSION ANALYSIS</span><span class="se">\n</span><span class="s2">&quot;</span>
+		<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Candidate name: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getfixed_para_one</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+		<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__correlationCalculation</span><span class="p">()</span>
+		<span class="n">fixed_para_two</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getfixed_para_two</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">text_output</span> <span class="o">!=</span> <span class="s2">&quot;Two variable sets are uncorrelated.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
+			<span class="n">training</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fixed_para_two</span><span class="p">)</span><span class="o">*</span><span class="mi">80</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Trainning data is from &quot;</span><span class="o">+</span><span class="n">fixed_para_two</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot; to &quot;</span><span class="o">+</span><span class="n">fixed_para_two</span><span class="p">[</span><span class="n">training</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Evaluation data is from &quot;</span><span class="o">+</span><span class="n">fixed_para_two</span><span class="p">[</span><span class="n">training</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot; to &quot;</span><span class="o">+</span><span class="n">fixed_para_two</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">fixed_para_two</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">regr</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span>
+			<span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">1</span><span class="p">][:</span><span class="n">training</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">1</span><span class="p">][:</span><span class="n">training</span><span class="o">-</span><span class="mi">1</span><span class="p">]}</span>
+			<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+			<span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]]</span>
+			<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;x value is &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;y value is &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">regr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+			<span class="n">slope</span> <span class="o">=</span> <span class="n">regr</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">intercept</span> <span class="o">=</span> <span class="n">regr</span><span class="o">.</span><span class="n">intercept_</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Coefficient computes from linear regression model:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Interception computes from linear regression model:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">intercept</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Linear approximation line has form: y = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; x + &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">intercept</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">dic_eval</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="n">training</span><span class="p">:],</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="n">training</span><span class="p">:]}</span>
+			<span class="n">data_eval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic_eval</span><span class="p">)</span>
+			<span class="n">data_eval</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="n">X_eval</span> <span class="o">=</span> <span class="n">data_eval</span><span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]]</span>
+			<span class="n">y_eval</span> <span class="o">=</span> <span class="n">data_eval</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
+			<span class="n">mean_sqr_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_eval</span><span class="p">)</span><span class="o">-</span><span class="n">y_eval</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">score</span> <span class="o">=</span> <span class="n">regr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_eval</span><span class="p">,</span><span class="n">y_eval</span><span class="p">)</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Mean square error is &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mean_sqr_err</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;Score of this prediction &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="n">text_output</span> <span class="o">=</span> <span class="n">text_output</span> <span class="o">+</span> <span class="s2">&quot;(Note: if score number equals 1, there is a perfect prediction and a strong linear relationship between two variables)</span><span class="se">\n</span><span class="s2">&quot;</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">__graphData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">slope</span><span class="p">,</span><span class="n">intercept</span><span class="p">,</span><span class="n">training</span><span class="p">)</span>
+			<span class="n">y_exact</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_two</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="n">training</span><span class="p">:]</span>
+			<span class="n">y_predict</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="n">date</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">training</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">fixed_para_two</span><span class="p">)):</span>
+				<span class="n">date</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fixed_para_two</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+				<span class="n">y_predict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">slope</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">getlist_para_one</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">+</span><span class="n">intercept</span><span class="p">))</span>
+			<span class="k">return</span> <span class="p">(</span><span class="n">text_output</span><span class="p">,(</span><span class="n">date</span><span class="p">,</span><span class="n">y_predict</span><span class="p">,</span><span class="n">y_exact</span><span class="p">))</span>
+
+
+	<span class="k">class</span> <span class="nc">Factory</span><span class="p">:</span>
+		<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fixed_para_one</span><span class="p">,</span><span class="n">fixed_para_two</span><span class="p">,</span><span class="n">list_para_one</span><span class="p">,</span><span class="n">list_para_two</span><span class="p">):</span><span class="k">return</span> <span class="n">LinearRegressionObject</span><span class="p">(</span><span class="n">fixed_para_one</span><span class="p">,</span><span class="n">fixed_para_two</span><span class="p">,</span><span class="n">list_para_one</span><span class="p">,</span><span class="n">list_para_two</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/osam3.PNG" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">LinearRegressionObject.py</a><ul>
+<li><a class="reference internal" href="#purpose-child-class-to-perform-linear-regression-analysis"><strong>Purpose:</strong> Child class to perform linear regression analysis</a><ul>
+<li><a class="reference internal" href="#inputs-name-of-candidate-either-list-of-tweet-counts-gdelt-counts-or-polls-counts"><strong>Inputs:</strong> Name of candidate, Either list of Tweet counts, GDELT counts, or Polls counts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/LinearRegressionObject.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">osam 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Phu Dang, Samuel Horton, David Bittle, Daniel Nolan, Bryan Connelly, Eric Lindemann.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>
